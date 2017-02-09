@@ -1,8 +1,10 @@
-from mitchty/alpine-ghc:latest
+from mitchty/alpine-ghc:7.10
 
 workdir /tmp
 
-run apk update && apk upgrade && \
+run sed -i 's/dl-cdn/dl-4/' /etc/apk/repositories && \
+    apk update && \
+    apk upgrade --available && \
     apk add make gcc musl-dev linux-headers bash file curl bsd-compat-headers autoconf automake protobuf-dev zlib-dev openssl-dev g++
 
 env dest_prefix /usr
@@ -74,7 +76,7 @@ run tar xvzf /tmp/$mosh_name.tar.gz && \
     strip $dest_prefix/bin/mosh-server.stripped
 
 # pandoc
-env pandoc_version 1.19.1
+env pandoc_version 1.14.1
 env cabaldir /root/.cabal/bin
 workdir /tmp
 run cabal update && cabal install hsb2hs && \

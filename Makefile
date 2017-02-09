@@ -39,11 +39,11 @@ pandoc.stripped.upx: pandoc.stripped
 	upx --best --ultra-brute $@
 
 docker:
-	docker build -t $(IMAGE) .
+	docker build --no-cache -t $(IMAGE) .
 
 $(TARGETS): docker
 	docker run -a stdout $(IMAGE) /bin/tar -cf - /usr/bin/$@ | $(TAR) xf - --strip-components=2 -C .
-	
+
 $(GHCTARGETS): docker
 	docker run -a stdout $(IMAGE) /bin/tar -cf - /root/.cabal/bin/$@ | $(TAR) xf - --strip-components=3 -C .
 
